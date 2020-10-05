@@ -12,9 +12,15 @@ CLI tool to quickly convert web-app localisation json file (i18n) into/back-into
 
 ---
 ### How to use
-- **To Extract (from JSON to CSV)**: `i18n_migrator merge --i18n-folder /path/to/folder/with/json --export-path /path/to/export/`
-- **To Export (from CSV to JSON files)**: `i18n_migrator export --csv-file /path/to/csv-file --i18n-folder /path/to/folder/to/put/json`
-- **To Test**: `poetry run pytest tests`
+
+![How It Works](how_it_works.jpg)
+
+- **To Extract (from JSON to CSV)**
+    - `i18n_migrator merge --i18n-folder /path/to/folder/with/json --export-path /path/to/export/`
+- **To Export (from CSV to JSON files)**
+    -  `i18n_migrator export --csv-file /path/to/csv-file --i18n-folder /path/to/folder/to/put/json`
+- **To Test**
+    - `poetry run pytest tests`
 
 ### How to develop
 - Please use Pyenv to manage environment (built on python 3.7.6)
