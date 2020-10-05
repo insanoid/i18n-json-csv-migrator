@@ -60,7 +60,10 @@ def merge(**kwargs):
 @click.option("-c", "--csv-file", type=click.File("rb"), required=True)
 def export(**kwargs):
     """Merge i18n JavaScript JSON files from the folder into 1 csv with language as columns."""
-    pass
+    all_languages = [
+        os.path.splitext(os.path.basename(path))[0] for path in glob.glob("{}/*.json".format(kwargs["i18n_folder"]))
+    ]
+    create_translation_files_from_csv(all_languages, kwargs["csv_file"], kwargs["i18n_folder"])
 
 
 def create_csv_from_translation_files(supported_locales, base_url, export_path):
@@ -130,11 +133,8 @@ def create_csv_from_translation_files(supported_locales, base_url, export_path):
                 current_langauge = supported_locales[idx]
                 untranslated_count[current_langauge] = untranslated_count.get(current_langauge, 0) + 1
 
-    print(
-        "Missing Translations: {}".format(
-            ", ".join(["{} = {}".format(code, count) for code, count in untranslated_count.items()])
-        )
-    )
+    untranslated_count_simplified = ["{} = {}".format(code, count) for code, count in untranslated_count.items()]
+    print("Missing Translations: {}".format(", ".join(untranslated_count_simplified)))
 
     # We have a CSV, which we will now write to export path.
     # If it's a file then we write to file, if it's a path we export to the path with the default name.
@@ -146,6 +146,35 @@ def create_csv_from_translation_files(supported_locales, base_url, export_path):
         writer.writerows(all_translation_rows)
 
     print("Wrote {} Strings: {}".format(len(all_translation_rows), file_path))
+
+
+def create_translation_files_from_csv(supported_locales, file_url, export_path):
+    """Export the translation CSV with languages as columns into JSON file per language"""
+    df = pd.read_csv(file_url, na_values=[" ", ".", ""], keep_default_na=False, encoding="utf-8", engine="c")
+    supported_locales = df.columns[1:]
+    # Store all translations in a single object with key as the language code.
+    translation_file_strings = {}
+    print("Found {} Strings".format(len(df)))
+
+    untranslated_count = {}
+    for _, translation_row in df.iterrows():
+        for locale_code in supported_locales:
+            if translation_file_strings.get(locale_code) is None:
+                translation_file_strings[locale_code] = {}
+            # we don't include blank keys, as untranslated strings should not be considered in the file.
+            if pd.isna(translation_row[locale_code]) is False:
+                translation_file_strings[locale_code][translation_row[BASE_KEY]] = translation_row[locale_code]
+            else:
+                untranslated_count[locale_code] = untranslated_count.get(locale_code, 0) + 1
+
+    print(untranslated_count)
+    untranslated_count_simplified = ["{} = {}".format(code, count) for code, count in untranslated_count.items()]
+    print("Missing Translations: {}".format(", ".join(untranslated_count_simplified)))
+
+    for locale_code in supported_locales:
+        with open("{}/{}.json".format(export_path, locale_code), "w+") as f:
+            json.dump(translation_file_strings[locale_code], f, indent=2, ensure_ascii=False)
+            print("Wrote File: {}{}.json".format(export_path, locale_code))
 
 
 if __name__ == "__main__":
