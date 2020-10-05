@@ -36,5 +36,5 @@ jobs:
           poetry run isort -y
       - name: Test
         run: |
-          pytest
+           poetry run pytest tests
           
