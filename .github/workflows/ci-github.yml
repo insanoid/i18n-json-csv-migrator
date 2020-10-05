@@ -12,10 +12,10 @@ on:
 jobs:
   ci:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        python-version: [3.7, 3.8]
-        poetry-version: [1.0, 1.0.10]
+        python-version: [3.7]
+        poetry-version: [1.0]
         os: [ubuntu-18.04, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -31,10 +31,9 @@ jobs:
         run: poetry install
       - name: Lint
         run: |
-          poetry run black .
+          poetry run black . --check
           poetry run flake8 --ignore=E501
-          poetry run isort -y
+          poetry run isort --check-only
       - name: Test
         run: |
            poetry run pytest tests
-          
