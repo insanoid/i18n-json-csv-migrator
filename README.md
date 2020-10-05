@@ -8,19 +8,22 @@ CLI tool to quickly convert web-app localisation json file (i18n) into/back-into
 - Want to translate csv/spreadsheet with the key and the languages as columns into 1 JSON file per language (like `de-DE.json`, `en-gb.json`)
 - Do you need a tool to quickly pull csv files from external sources into translation files in your JavaScript app?
 
-**If any of the above your usecase? then this tool is for you.**
+**If any of the above your use-case? then this tool is for you.**
 
 ---
 ### How to use
-- **To Extract (from JSON to CSV)**: `i18n-migrator merge --i18n-folder /path/to/folder/with/json --export-path /path/to/export/`
-- **To Export (from CSV to JSON files)**: `i18n-migrator export --csv-file /path/to/csv-file --i18n-folder /path/to/folder/to/put/json`
-- **To Test**: `i18n-migrator test`
+- **To Extract (from JSON to CSV)**: `i18n_migrator merge --i18n-folder /path/to/folder/with/json --export-path /path/to/export/`
+- **To Export (from CSV to JSON files)**: `i18n_migrator export --csv-file /path/to/csv-file --i18n-folder /path/to/folder/to/put/json`
+- **To Test**: `poetry run pytest tests`
 
 ### How to develop
 - Please use Pyenv to manage environment (built on python 3.7.6)
 - Install Poetry: `pip install poetry`
 - Install all packages: `poetry install`
-- Run `black .`, `flake8` and `isort -y`.
+- Run:
+    - `poetry run black .`
+    - `poetry run flake8`
+    - `poetry run isort -y`.
 
 ### TODO/Improvements
 - Ability to deal with variables not matching between language files
@@ -28,4 +31,3 @@ CLI tool to quickly convert web-app localisation json file (i18n) into/back-into
 - Integrate actions to test and create builds and releases.
 - Build a UI to make it easy for users to use.
 - Create a build to install directly instead of users having to build.
-- Add `flake8`.
