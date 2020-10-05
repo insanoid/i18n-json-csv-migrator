@@ -33,7 +33,7 @@ jobs:
         run: |
           poetry run black .
           poetry run flake8 --ignore=E501
-          poetry run isort -y.
+          poetry run isort -y
       - name: Test
         run: |
           pytest
