@@ -141,7 +141,7 @@ def create_csv_from_translation_files(supported_locales, base_url, export_path):
     file_path = export_path
     if os.path.isdir(export_path) is True:
         file_path = "{}/{}".format(export_path, EXPORT_FILE_NAME)
-    with open(file_path, "w", newline="") as csv_file:
+    with open(file_path, "w+", newline="") as csv_file:
         writer = csv.writer(csv_file, quoting=csv.QUOTE_NONNUMERIC)
         writer.writerows(all_translation_rows)
 
